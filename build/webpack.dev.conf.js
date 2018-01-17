@@ -9,6 +9,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
+const axios = require('axios')
 
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
@@ -46,6 +47,21 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
     // webpack内置的devServer，设置 before()
     before(app) {
+      app.get('/api/getRecommend', function (req, res) {
+        const url = 'https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomepagerecommend.fcg'
+        axios.get(url, {
+          headers: {
+            referer: 'https://m.y.qq.com',
+            origin: 'm.y.qq.com'
+          },
+          params: req.query
+        }).then((response) => {
+          res.json(response.data) // axios 返回的数据在 response.data，要把数据透传到我们自定义的接口里面 res.json(response.data)
+        }).catch((e) => {
+          console.log(e)
+        })
+      });
+
       app.get('/api/getDiscList', function (req, res) {
         const url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
         axios.get(url, {
@@ -55,7 +71,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           },
           params: req.query
         }).then((response) => {
-          res.json(response.data)
+          res.json(response.data) // axios 返回的数据在 response.data，要把数据透传到我们自定义的接口里面 res.json(response.data)
         }).catch((e) => {
           console.log(e)
         })

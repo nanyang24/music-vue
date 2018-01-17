@@ -11,9 +11,12 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "axios": "^0.17.1",
     "babel-runtime": "^6.26.0",
+    "better-scroll": "^1.7.2",
     "fastclick": "^1.0.6",
     "vue": "^2.5.2",
+    "vue-lazyload": "^1.1.4",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
@@ -45,6 +48,7 @@
     "file-loader": "^1.1.4",
     "friendly-errors-webpack-plugin": "^1.6.1",
     "html-webpack-plugin": "^2.30.1",
+    "jsonp": "^0.2.1",
     "node-notifier": "^5.1.2",
     "node-sass": "^4.7.2",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
