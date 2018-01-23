@@ -23,6 +23,10 @@
       data: {
         type: Array,
         default: null
+      },
+      listenScroll: {
+        type: Boolean,
+        defalut: false
       }
     },
     mounted() {
@@ -38,6 +42,12 @@
           click: this.click,
 //          eventPassthrough: this.direction === DIRECTION_V ? DIRECTION_H : DIRECTION_V
         })
+        if (this.listenScroll) {
+          let self = this
+          this.scroll.on('scroll', (pos) => { // 实时监测滚动事件，派发事件 Y轴距离
+            self.$emit('scroll', pos)
+          })
+        }
       },
       disable() {
         this.scroll && this.scroll.disable()
@@ -48,6 +58,13 @@
       refresh() {
         this.scroll && this.scroll.refresh()
       },
+      // 滚动至
+      scrollTo() {
+        this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments)
+      },
+      scrollToElement() {
+        this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
+      }
     },
     watch: {
       data() {

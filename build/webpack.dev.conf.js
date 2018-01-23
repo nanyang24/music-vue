@@ -77,6 +77,21 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         })
       });
 
+      app.get('/api/getSingerList', function (req, res) {
+        const url = 'https://c.y.qq.com/v8/fcg-bin/v8.fcg'
+        axios.get(url, {
+          headers: {
+            referer: 'https://y.qq.com/portal/singer_list.html',
+            host: 'c.y.qq.com'
+          },
+          params: req.query
+        }).then((response) => {
+          res.json(response.data) // axios 返回的数据在 response.data，要把数据透传到我们自定义的接口里面 res.json(response.data)
+        }).catch((e) => {
+          console.log(e)
+        })
+      });
+
       app.get('/api/getCdInfo', function (req, res) {
         const url = 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
         axios.get(url, {
