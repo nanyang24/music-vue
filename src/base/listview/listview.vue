@@ -1,5 +1,6 @@
 <template>
-  <Scroll class="listview" ref="listview"
+  <Scroll class="listview"
+          ref="listview"
           :listenScroll="listenScroll"
           :probeType="probeType"
           @scroll="scroll">
@@ -9,14 +10,14 @@
         <h2 class="list-group-title">{{group.title}}</h2>
         <!--首字母条目-->
         <ul>
-          <li v-for="item in group.items" class="list-group-item">
+          <li @click="selectItem(item)" v-for="item in group.items" class="list-group-item">
             <img v-lazy="item.avatar" class="avatar">
             <span class="name">{{item.name}}</span>
           </li>
         </ul>
       </li>
     </ul>
-    <div class="list-shortcut" @touchstart="onShortcutTouchStart" @touchmove.stop.prevent="onShortcutTouchMove">
+    <div class="list-shortcut" @touchstart.stop.prevent="onShortcutTouchStart" @touchmove.stop.prevent="onShortcutTouchMove">
       <ul>
         <li v-for="(item, index) in shortcutlist" :data-index="index" class="item"
             :class="{'current': currentIndex === index}">
@@ -73,6 +74,9 @@
       }
     },
     methods: {
+      selectItem(item) {
+        this.$emit('select', item)
+      },
       onShortcutTouchStart(e) {
         let anchorIndex = getData(e.target, 'index')  // 获取 点击具体锚点的 index 值
         let firstTouch = e.touches[0]   // 第一次触碰的位置

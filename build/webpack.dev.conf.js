@@ -92,6 +92,21 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         })
       });
 
+      app.get('/api/getSingerDetail', function (req, res) {
+        const url = 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg'
+        axios.get(url, {
+          headers: {
+            referer: 'https://y.qq.com/n/yqq/singer/003Nz2So3XXYek.html',
+            host: 'c.y.qq.com'
+          },
+          params: req.query
+        }).then((response) => {
+          res.json(response.data) // axios 返回的数据在 response.data，要把数据透传到我们自定义的接口里面 res.json(response.data)
+        }).catch((e) => {
+          console.log(e)
+        })
+      });
+
       app.get('/api/getCdInfo', function (req, res) {
         const url = 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
         axios.get(url, {
