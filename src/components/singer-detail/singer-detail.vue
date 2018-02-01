@@ -1,6 +1,5 @@
 <template>
   <transition name="slide">
-    <!--<div class="singer-detail"></div>-->
     <MusicList :songs="songs" :title="title" :bgImage="bgImage"></MusicList>
   </transition>
 </template>
@@ -47,7 +46,7 @@
       _normalizeSongs(list) {
         let ret = []
         list.forEach(item => {
-          let {musicData} = item
+          let {musicData} = item  // 从 item 对象取出 musicData
           if (musicData.songid && musicData.songmid && musicData.albummid) {
             ret.push(createSong(musicData))
           }

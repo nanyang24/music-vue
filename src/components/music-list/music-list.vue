@@ -6,7 +6,7 @@
     <h1 class="title">{{title}}</h1>
     <div class="bg-image" :style="bgStyle" ref="bgImage">
       <div class="play-wrapper">
-        <div ref="playBtn" v-show="songs.length>0" class="play">
+        <div @click="randomPlay" ref="playBtn" v-show="songs.length>0" class="play">
           <i class="icon-play"></i>
           <span class="text">随机播放全部</span>
         </div>
@@ -16,7 +16,7 @@
     <div class="bg-layer" ref="layer"></div>
     <Scroll @scroll="scroll" ref="list" class="list" :probeType="probeType" :listenScroll="listenScroll">
       <div class="song-list-wrapper">
-        <SongList :songs="songs"></SongList>
+        <SongList @select="selectItem" :songs="songs"></SongList>
       </div>
       <div class="loading-container" v-show="!songs.length">
         <Loading></Loading>
@@ -26,16 +26,21 @@
 </template>
 
 <script>
-  import Loading from 'base/loading/loading'
   import SongList from 'base/song-list/song-list'
+  import Loading from 'base/loading/loading'
   import Scroll from 'base/scroll/scroll'
   import {prefixStyle} from 'common/js/dom'
+  import {mapActions} from 'vuex'
+  import {playListMixin} from 'common/js/mixin'
 
   const RESERVED_HEIGHT = 45
   const transform = prefixStyle('transform')
   const backdrop = prefixStyle('backdrop-filter')
 
   export default {
+    mixins: [
+      playListMixin
+    ],
     props: {
       bgImage: {
         type: String,
@@ -70,12 +75,32 @@
       this.minTransalteY = -this.imageHeight + RESERVED_HEIGHT
     },
     methods: {
+      handlePlayList(playList) {
+        const bottom = playList.length ? `60px` : ``
+        this.$refs.list.$el.style.bottom = bottom
+        this.$refs.list.refresh()
+      },
       scroll(pos) {
         this.scrollY = pos.y
       },
-      back(){
+      back() {
         this.$router.back()
-      }
+      },
+      selectItem(item, index) {
+        this.selectToPlay({
+          list: this.songs,
+          index
+        })
+      },
+      randomPlay() {
+        this.randomToPlay({
+          list: this.songs
+        })
+      },
+      ...mapActions([
+        'selectToPlay',
+        'randomToPlay'
+      ])
     },
     watch: {
       scrollY(newY) {

@@ -1,4 +1,5 @@
 import 'babel-polyfill'
+import 'common/js/hack'
 import Vue from 'vue'
 import App from './App'
 import router from './router'
