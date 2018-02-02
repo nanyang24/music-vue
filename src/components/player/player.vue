@@ -52,7 +52,8 @@
           <div class="progress-wrapper">
             <span class="time time-l">{{formatTime(currentTime)}}</span>
             <div class="progress-bar-wrapper">
-              <ProgressBar :percent="percent" @percentChange="onProgressBarChange"></ProgressBar>
+              <ProgressBar :percent="percent" @percentChange="onProgressBarChange"
+                           @percentChanging="onProgressBarChanging"></ProgressBar>
             </div>
             <span class="time time-r">{{formatTime(currentSong.duration)}}</span>
           </div>
@@ -166,6 +167,7 @@
     mounted() {
       // 适配 iPhoneX
       this.$refs.cdWrapper.style.top = isIphoneX() ? `25px` : 0
+      this.$refs.playingLyricWrapper.style.marginTop = isIphoneX() ? `120px` : `50px`
     },
     methods: {
       back() {
@@ -307,10 +309,16 @@
       },
       onProgressBarChange(percent) {
         const currentTime = this.currentSong.duration * percent
-        this.$refs.audio.currentTime = currentTime
+        this.currentTime = this.$refs.audio.currentTime = currentTime  // 设置当前播放歌曲时间
         if (!this.playing) this.togglePlaying() // 判断是否现在是暂停状态，如果是，继续播放
         if (this.currentLyric) {
-          this.currentLyric.seek(currentTime * 1000)
+          this.currentLyric.seek(currentTime * 1000)  // 设置当前播放歌曲的歌词
+        }
+      },
+      onProgressBarChanging(percent) {
+        this.currentTime = this.currentSong.duration * percent
+        if (this.currentLyric) {
+          this.currentLyric.seek(this.currentTime * 1000)  // 设置当前播放歌曲的歌词
         }
       },
       changeMode() {
@@ -368,7 +376,6 @@
         } else {
           this.$refs.lyricList.scrollTo(0, 0, 1000)
         }
-        this.$refs.playingLyricWrapper.style.marginTop = isIphoneX() ? `120px` : `50px`
         this.playingLyric = txt
       },
       middleTouchStart(e) {
@@ -442,11 +449,16 @@
         // 清除歌词计时器
         if (this.currentLyric) {
           this.currentLyric.stop()
+          // 重置为null，否则进下首歌歌词会跳动
+          this.currentLyric = null
+          this.currentTime = 0
+          this.playingLyric = ''
+          this.currentLineNum = 0
         }
-        setTimeout(() => {
+        this.$nextTick(() => {
           this.$refs.audio.play()
           this.getLyric()
-        }, 1000)
+        })
         // 切到后台的时候 JS 是停止的，切换到后台才会重新执行，触发了 end 函数执行 currentSong 的变化，currentSong 改变会影响 audio 的 src 的变化，这个时候如果没有延时立即播放，会导致歌曲还没有准备好就立马调用 play 导致不能播放的问题。
       },
       playing(newFlag) {

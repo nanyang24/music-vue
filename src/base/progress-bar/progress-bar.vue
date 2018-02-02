@@ -44,6 +44,7 @@
         // 偏移量(已播放的进度长度 + 手指移动的偏移量)，要大于0，但是总和不能大于整体宽度
         const offsetWidth = Math.min(this.$refs.progressBar.clientWidth - progressBtnWidth, Math.max(0, this.touch.left + deltaX))
         this._offset(offsetWidth)
+        this.$emit('percentChanging', this._getPercent())
       },
       progressTouchEnd() {
         this.touch.initiated = false

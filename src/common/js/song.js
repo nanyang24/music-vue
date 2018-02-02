@@ -31,7 +31,7 @@ export class Song {
     })
   }
 }
-
+// 创建我们自定义内容的歌曲对象
 export function createSong(musicData) {
   return new Song({
     id: musicData.songid,
