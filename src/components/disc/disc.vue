@@ -6,8 +6,8 @@
 
 <script>
   import MusicList from 'components/music-list/music-list'
-  import {mapGetters} from 'vuex'
-  import {getSingerDetail} from 'api/singer'
+  import {mapGetters, mapMutations} from 'vuex'
+  import {getDiscSongList} from 'api/recommend'
   import {ERR_OK} from 'api/config'
   import {createSong} from 'common/js/song'
 
@@ -18,36 +18,36 @@
       }
     },
     computed: {
-      title(){
-        return this.singer.name
+      title() {
+        return this.disc.dissname
       },
-      bgImage(){
-        return this.singer.avatar
+      bgImage() {
+        return this.disc.imgurl
       },
       ...mapGetters([
-        'singer'
+        'disc'
       ])
     },
     created() {
-      this._getSingerDetail()
+      this._getDiscSongList()
     },
     methods: {
-      _getSingerDetail() {
-        if (!this.singer.id) {
-          this.$router.push('/singer')
+      _getDiscSongList() {
+        if (!this.disc.dissid) {
+          this.$router.push('/recommend')
           return
         }
-        getSingerDetail(this.singer.id).then(res => {
-          if (res.code === ERR_OK) {
-            this.songs = this._normalizeSongs(res.data.list)
-          }
-        })
+        getDiscSongList(this.disc.dissid)
+          .then(res => {
+            if (res.code === ERR_OK) {
+              this.songs = this._normalizeSongs(res.cdlist[0].songlist)
+            }
+          })
       },
       _normalizeSongs(list) {
         let ret = []
-        list.forEach(item => {
-          let {musicData} = item  // 从 item 对象取出 musicData
-          if (musicData.songid && musicData.songmid && musicData.albummid) {
+        list.forEach(musicData => {
+          if (musicData.songid && musicData.albummid) {
             ret.push(createSong(musicData))
           }
         })
@@ -61,7 +61,6 @@
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
-
   .slide-enter-active, .slide-leave-active {
     transition: all 0.3s;
   }

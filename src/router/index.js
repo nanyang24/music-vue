@@ -7,6 +7,7 @@ import Rank from 'components/rank/rank'
 import Search from 'components/search/search'
 // 二级路由组件
 import SingerDetail from 'components/singer-detail/singer-detail'
+import Disc from 'components/disc/disc'
 
 Vue.use(Router)
 
@@ -18,7 +19,13 @@ export default new Router({
     },
     {
       path: '/recommend',
-      component: Recommend
+      component: Recommend,
+      children: [
+        {
+          path: ':id', // 表示 id 为变量
+          component: Disc
+        }
+      ]
     },
     {
       path: '/singer',
