@@ -8,6 +8,7 @@ import Search from 'components/search/search'
 // 二级路由组件
 import SingerDetail from 'components/singer-detail/singer-detail'
 import Disc from 'components/disc/disc'
+import TopList from 'components/top-list/top-list'
 
 Vue.use(Router)
 
@@ -39,7 +40,13 @@ export default new Router({
     },
     {
       path: '/rank',
-      component: Rank
+      component: Rank,
+      children: [
+        {
+          path: ':id', // 表示 id 为变量
+          component: TopList
+        }
+      ]
     },
     {
       path: '/search',
