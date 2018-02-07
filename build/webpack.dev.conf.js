@@ -198,6 +198,36 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           console.log(e)
         })
       });
+
+      app.get('/api/getHotKey', function (req, res) {
+        const url = 'https://c.y.qq.com/splcloud/fcgi-bin/gethotkey.fcg'
+        axios.get(url, {
+          headers: {
+            referer: 'https://m.y.qq.com/',
+            origin: 'https://m.y.qq.com/'
+          },
+          params: req.query
+        }).then((response) => {
+          res.json(response.data) // axios 返回的数据在 response.data，要把数据透传到我们自定义的接口里面 res.json(response.data)
+        }).catch((e) => {
+          console.log(e)
+        })
+      });
+
+      app.get('/api/search', function (req, res) {
+        const url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp'
+        axios.get(url, {
+          headers: {
+            referer: 'https://m.y.qq.com/',
+            origin: 'https://m.y.qq.com/'
+          },
+          params: req.query
+        }).then((response) => {
+          res.json(response.data) // axios 返回的数据在 response.data，要把数据透传到我们自定义的接口里面 res.json(response.data)
+        }).catch((e) => {
+          console.log(e)
+        })
+      });
     }
   },
   plugins: [

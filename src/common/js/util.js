@@ -18,3 +18,16 @@ export function shuffle(arr) {
 export function isIphoneX() {
   return /iphone/gi.test(navigator.userAgent) && (screen.height === 812 && screen.width === 375)
 }
+
+// debounce 的参数是一个函数，返回的也是一个函数，而 $watch 就是 watch 这个返回后的函数，因为 watch 的回调函数是有参数的，这个参数就是这个 ...args，这样 debounce 的参数函数在通过计时器延时执行的时候，也可以访问到这个 args 了。
+export function debounce(func, delay) {
+  let timer
+  return function (...args) {
+    if (timer) {
+      clearTimeout(timer)
+    }
+    timer = setTimeout(() => {
+      func.apply(this, args)
+    }, delay)
+  }
+}

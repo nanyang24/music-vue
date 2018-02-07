@@ -27,6 +27,14 @@
       listenScroll: {
         type: Boolean,
         defalut: false
+      },
+      pullup: {
+        type: Boolean,
+        default: false
+      },
+      beforeScroll: {
+        type: Boolean,
+        default: false
       }
     },
     mounted() {
@@ -46,6 +54,18 @@
           let self = this
           this.scroll.on('scroll', (pos) => { // 实时监测滚动事件，派发事件 Y轴距离
             self.$emit('scroll', pos)
+          })
+        }
+        if (this.pullup) {
+          this.scroll.on('scrollEnd', () => {
+            if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+              this.$emit('scrollToEnd') // 满足这个条件，就是滚动到底部了
+            }
+          })
+        }
+        if (this.beforeScroll) {
+          this.scroll.on('beforeScrollStart', () => {
+            this.$emit('beforeScroll')
           })
         }
       },
