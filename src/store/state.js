@@ -1,5 +1,5 @@
 import {playMode} from 'common/js/config'
-import {loadSearch} from 'common/js/cache'
+import {loadSearch, loadPlay} from 'common/js/cache'
 
 const state = {
   singer: {},
@@ -12,7 +12,8 @@ const state = {
 
   disc: {},
   topList: {},
-  searchHistory: loadSearch()
+  searchHistory: loadSearch(), // 初始值从缓存里读取
+  playHistory: loadPlay()
 }
 
 export default state

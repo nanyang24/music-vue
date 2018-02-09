@@ -96,11 +96,12 @@
             <i @click.stop.prevent="togglePlaying" :class="miniPlayIcon" class="icon-mini"></i>
           </ProgressCircle>
         </div>
-        <div class="control">
+        <div @click.stop="showPlaylist" class="control">
           <i class="icon-playlist"></i>
         </div>
       </div>
     </transition>
+    <Playlist ref="playlist"></Playlist>
     <audio ref="audio" :src="currentSong.url"
            @canplay="ready"
            @error="error"
@@ -112,18 +113,23 @@
   import ProgressBar from 'base/progress-bar/progress-bar'
   import ProgressCircle from 'base/progress-circle/progress-circle'
   import Scroll from 'base/scroll/scroll'
-  import {mapGetters, mapMutations} from 'vuex'
+  import {mapGetters, mapMutations, mapActions} from 'vuex'
   import animations from 'create-keyframe-animation'
   import {prefixStyle} from 'common/js/dom'
   import {playMode} from 'common/js/config'
-  import {shuffle, isIphoneX} from 'common/js/util'
+  import {isIphoneX} from 'common/js/util'
   import Lyric from 'lyric-parser'
+  import Playlist from 'components/playlist/playlist'
+  import {playerMixin} from 'common/js/mixin'
 
   const transform = prefixStyle('transform')
   const transitionDuration = prefixStyle('transitionDuration')
   const timeExp = /\[(\d{2}):(\d{2}):(\d{2})]/g
 
   export default {
+    mixins: [
+      playerMixin
+    ],
     data() {
       return {
         songReady: false,
@@ -153,17 +159,10 @@
       percent() {
         return this.currentTime / this.currentSong.duration
       },
-      iconMode() {
-        return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
-      },
       ...mapGetters([
         'fullScreen',
-        'playList',
-        'currentSong',
         'playing',
-        'currentIndex',
-        'mode',
-        'sequenceList'
+        'currentIndex'
       ])
     },
     created() {
@@ -291,6 +290,7 @@
       },
       ready() {
         this.songReady = true
+        this.savePlayHistory(this.currentSong)
       },
       // 保证 在 当前歌曲链接 错误的情况下，用户可以点击下一首播放
       error() {
@@ -313,6 +313,9 @@
         }
         return num
       },
+      showPlaylist() {
+        this.$refs.playlist.show()
+      },
       onProgressBarChange(percent) {
         const currentTime = this.currentSong.duration * percent
         this.currentTime = this.$refs.audio.currentTime = currentTime  // 设置当前播放歌曲时间
@@ -326,23 +329,6 @@
         if (this.currentLyric) {
           this.currentLyric.seek(this.currentTime * 1000)  // 设置当前播放歌曲的歌词
         }
-      },
-      changeMode() {
-        this.setPlayMode((this.mode + 1) % 3)
-        let list
-        if (this.mode === playMode.random) {
-          list = shuffle(this.sequenceList)
-        } else {
-          list = this.sequenceList
-        }
-        this.resetCurrentIndex(list)
-        this.setPlayList(list)  // 启用新的播放列表
-      },
-      resetCurrentIndex(list) { // 打乱播放列表后 将当前播放的歌曲 index 设置成 打乱后列表中这首歌的 index
-        let index = list.findIndex((item) => {
-          return item.id === this.currentSong.id
-        })
-        this.setCurrentIndex(index)
       },
       end() {
         if (this.mode === playMode.loop) {
@@ -450,15 +436,15 @@
         this.$refs.middleL.style[transitionDuration] = `${durationTime}ms`
       },
       ...mapMutations({
-        setFullScreen: 'SET_FULL_SCREEN',
-        setPlayingState: 'SET_PLAYING_STATE',
-        setCurrentIndex: 'SET_CURRENT_INDEX',
-        setPlayMode: 'SET_PLAY_MODE',
-        setPlayList: 'SET_PLAYLIST'
-      })
+        setFullScreen: 'SET_FULL_SCREEN'
+      }),
+      ...mapActions([
+        'savePlayHistory'
+      ])
     },
     watch: {
       currentSong(newSong, oldSong) {
+        if (!newSong.id) return
         if (!newSong.id || !newSong.url || newSong.id === oldSong.id) return
         // 清除歌词计时器
         if (this.currentLyric) {
@@ -485,7 +471,8 @@
     components: {
       ProgressBar,
       ProgressCircle,
-      Scroll
+      Scroll,
+      Playlist
     }
   }
 </script>
