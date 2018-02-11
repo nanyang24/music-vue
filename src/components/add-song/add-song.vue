@@ -15,16 +15,14 @@
                   :switches="switches"
                   :currentIndex="currentIndex"></Switches>
         <div class="list-wrapper">
-          <Scroll v-if="currentIndex === 0" ref="songList" :data="playHistory" class="list-scroll">
+          <Scroll v-if="currentIndex === 0" ref="songList" class="list-scroll">
             <div class="list-inner">
               <SongList @select="selectSong" :songs="playHistory"></SongList>
             </div>
           </Scroll>
           <Scroll v-if="currentIndex === 1" ref="searchList" class="list-scroll">
             <div class="list-inner">
-              <SearchList @delete="deleteSearchHistory" @select="addQuery" :searches="searchHistory">
-
-              </SearchList>
+              <SearchList @delete="deleteSearchHistory" @select="addQuery" :searches="searchHistory"></SearchList>
             </div>
           </Scroll>
         </div>

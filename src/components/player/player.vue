@@ -74,7 +74,7 @@
               <i @click="next" class="icon-next"></i>
             </div>
             <div class="icon i-right">
-              <i class="icon-not-favorite"></i>
+              <i @click="toggleFavorite(currentSong)" class="icon" :class="getFavoriteIcon(currentSong)"></i>
             </div>
           </div>
         </div>
@@ -120,7 +120,7 @@
   import {isIphoneX} from 'common/js/util'
   import Lyric from 'lyric-parser'
   import Playlist from 'components/playlist/playlist'
-  import {playerMixin} from 'common/js/mixin'
+  import {playerMixin, favoriteMixin} from 'common/js/mixin'
 
   const transform = prefixStyle('transform')
   const transitionDuration = prefixStyle('transitionDuration')
@@ -128,7 +128,8 @@
 
   export default {
     mixins: [
-      playerMixin
+      playerMixin,
+      favoriteMixin
     ],
     data() {
       return {

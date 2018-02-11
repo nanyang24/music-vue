@@ -17,8 +17,8 @@
                 v-for="(item, index) in sequenceList">
               <i class="current" :class="getCurrentIcon(item)"></i>
               <span class="text">{{item.name}}</span>
-              <span class="like">
-                <i class="icon-not-favorite"></i>
+              <span @click.stop="toggleFavorite(item)" class="like">
+                <i :class="getFavoriteIcon(item)"></i>
               </span>
               <span @click.stop="deleteOne(item)" class="delete">
                 <i class="icon-delete"></i>
@@ -47,12 +47,13 @@
   import Scroll from 'base/scroll/scroll'
   import {playMode} from 'common/js/config'
   import Confirm from 'base/confirm/confirm'
-  import {playerMixin} from 'common/js/mixin'
+  import {playerMixin, favoriteMixin} from 'common/js/mixin'
   import addSong from 'components/add-song/add-song'
 
   export default {
     mixins: [
-      playerMixin
+      playerMixin,
+      favoriteMixin
     ],
     data() {
       return {

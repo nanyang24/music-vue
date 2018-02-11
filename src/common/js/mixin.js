@@ -95,3 +95,29 @@ export const searchMixin = {
     ])
   }
 }
+
+export const favoriteMixin = {
+  computed: {
+    ...mapGetters([
+      'favoriteList'
+    ])
+  },
+  methods: {
+    getFavoriteIcon(song) {
+      return this.isFavorite(song) ? 'icon-favorite' : 'icon-not-favorite'
+    },
+    toggleFavorite(song) {
+      return this.isFavorite(song) ? this.deleteFavoriteList(song) : this.saveFavoriteList(song)
+    },
+    isFavorite(song) {
+      const index = this.favoriteList.findIndex((item) => {
+        return item.id === song.id
+      })
+      return index > -1
+    },
+    ...mapActions([
+      'saveFavoriteList',
+      'deleteFavoriteList'
+    ])
+  }
+}

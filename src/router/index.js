@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// 引入4个 一级路由组件
+// 引入5个 一级路由组件
 import Recommend from 'components/recommend/recommend'
 import Singer from 'components/singer/singer'
 import Rank from 'components/rank/rank'
 import Search from 'components/search/search'
+import UserCenter from 'components/user-center/user-center'
 // 二级路由组件
 import SingerDetail from 'components/singer-detail/singer-detail'
 import Disc from 'components/disc/disc'
@@ -57,6 +58,10 @@ export default new Router({
           component: SingerDetail
         }
       ]
+    },
+    {
+      path: '/user',
+      component: UserCenter
     }
   ]
 })
