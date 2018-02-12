@@ -35,7 +35,6 @@
   import {mapGetters, mapMutations, mapActions} from 'vuex'
   import Scroll from 'base/scroll/scroll'
   import SongList from 'base/song-list/song-list'
-  import {Song} from 'common/js/song'
   import {playListMixin} from 'common/js/mixin'
   import NoResult from 'base/no-result/no-result'
 
@@ -76,7 +75,7 @@
         this.currentIndex = index
       },
       selectSong(song) {
-        this.insertSong(new Song(song))
+        this.insertSong(song)
       },
       back() {
         this.$router.back()
@@ -84,9 +83,7 @@
       randomPlay() {
         let list = this.currentIndex === 0 ? this.favoriteList : this.playHistory
         if (list.length === 0) return
-        list = list.map((item) => {
-          return new Song(item)
-        })
+
         this.randomToPlay({list})
       },
       ...mapActions([

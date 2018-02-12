@@ -98,8 +98,12 @@ export const searchMixin = {
 
 export const favoriteMixin = {
   computed: {
+    favoriteIcon() {
+      return this.getFavoriteIcon(this.currentSong)
+    },
     ...mapGetters([
-      'favoriteList'
+      'favoriteList',
+      'currentSong'
     ])
   },
   methods: {

@@ -24,8 +24,8 @@
              @touchend="middleTouchEnd">
           <div class="middle-l" ref="middleL" @touchstart="cdTouchStart" @touchmove="cdTouchMove">
             <div class="cd-wrapper" ref="cdWrapper">
-              <div class="cd">
-                <img :class="cdCls" class="image" :src="currentSong.image">
+              <div class="cd" ref="imageCdWrapper">
+                <img ref="image" :class="cdCls" class="image" :src="currentSong.image">
               </div>
             </div>
             <div class="playing-lyric-wrapper" ref="playingLyricWrapper">
@@ -55,7 +55,7 @@
           <div class="progress-wrapper">
             <span class="time time-l">{{formatTime(currentTime)}}</span>
             <div class="progress-bar-wrapper">
-              <ProgressBar :percent="percent" @percentChange="onProgressBarChange"
+              <ProgressBar ref="progressBar" :percent="percent" @percentChange="onProgressBarChange"
                            @percentChanging="onProgressBarChanging"></ProgressBar>
             </div>
             <span class="time time-r">{{formatTime(currentSong.duration)}}</span>
@@ -74,7 +74,7 @@
               <i @click="next" class="icon-next"></i>
             </div>
             <div class="icon i-right">
-              <i @click="toggleFavorite(currentSong)" class="icon" :class="getFavoriteIcon(currentSong)"></i>
+              <i @click="toggleFavorite(currentSong)" class="icon" :class="favoriteIcon"></i>
             </div>
           </div>
         </div>
@@ -83,8 +83,8 @@
     <transition name="mini">
       <div @click="open" class="mini-player" v-show="!fullScreen">
         <div class="icon">
-          <div class="imgWrapper">
-            <img :class="cdCls" width="40" height="40" :src="currentSong.image">
+          <div class="imgWrapper" ref="miniWrapper">
+            <img ref="miniImage" :class="cdCls" width="40" height="40" :src="currentSong.image">
           </div>
         </div>
         <div class="text">
@@ -102,10 +102,12 @@
       </div>
     </transition>
     <Playlist ref="playlist"></Playlist>
-    <audio ref="audio" :src="currentSong.url"
-           @canplay="ready"
+    <audio ref="audio"
+           @playing="ready"
            @error="error"
-           @timeupdate="updateTime" @ended="end"></audio>
+           @timeupdate="updateTime"
+           @ended="end"
+           @pause="paused"></audio>
   </div>
 </template>
 
@@ -152,7 +154,7 @@
         return this.playing ? 'icon-pause-mini' : 'icon-play-mini'
       },
       cdCls() {
-        return this.playing ? 'play' : 'play pause'
+        return this.playing ? 'play' : ''
       },
       disableCls() {
         return this.songReady ? '' : 'disable'
@@ -261,6 +263,7 @@
         if (!this.songReady) return
         if (this.playList.length === 1) {
           this.loop()
+          return // 如果只有一首，切换直接返回，不执行后续的 songReady 为 false
         } else {
           let index = this.currentIndex - 1
           if (index === -1) {
@@ -277,6 +280,7 @@
         if (!this.songReady) return
         if (this.playList.length === 1) {
           this.loop()
+          return // 如果只有一首，切换直接返回，不执行后续的 songReady 为 false
         } else {
           let index = this.currentIndex + 1
           if (index === this.playList.length) {
@@ -290,11 +294,25 @@
         this.songReady = false
       },
       ready() {
+        clearTimeout(this.timer)
+        // 监听 playing 这个事件可以确保慢网速或者快速切换歌曲导致的 DOM Exception
         this.songReady = true
+        this.canLyricPlay = true // 增加一个标识位处理当歌曲加载晚于歌词的情况
         this.savePlayHistory(this.currentSong)
+        // 如果歌曲的播放晚于歌词的出现，播放的时候需要同步歌词
+        if (this.currentLyric && !this.isPureMusic) {
+          this.currentLyric.seek(this.currentTime * 1000)
+        }
+      },
+      paused() {
+        this.setPlayingState(false)
+        if (this.currentLyric) {
+          this.currentLyric.stop()
+        }
       },
       // 保证 在 当前歌曲链接 错误的情况下，用户可以点击下一首播放
       error() {
+        clearTimeout(this.timer)
         this.songReady = true
       },
       updateTime(e) {  // 参数是 event 对象
@@ -348,6 +366,7 @@
       getLyric() {
         this.currentSong.getLyric()
           .then(lyric => {
+            if (this.currentSong.lyric !== lyric) return // 防止歌词不对应
             this.currentLyric = new Lyric(lyric, this.handleLyric)
             // 有可能为纯音乐
             this.isPureMusic = !this.currentLyric.lines.length
@@ -355,7 +374,7 @@
               this.pureMusicLyric = this.currentLyric.lrc.replace(timeExp, '').trim()
               this.playingLyric = this.pureMusicLyric
             } else {
-              if (this.playing) {
+              if (this.playing && this.canLyricPlay) {
                 // 这个时候有可能用户已经播放了歌曲，要切到对应位置
                 this.currentLyric.seek(this.currentTime * 1000)
               }
@@ -436,6 +455,20 @@
         this.$refs.middleL.style.opacity = opacity
         this.$refs.middleL.style[transitionDuration] = `${durationTime}ms`
       },
+      /**
+       * 计算内层Image的transform，并同步到外层容器
+       * @param wrapper
+       * @param inner
+       */
+      syncWrapperTransform(wrapper, inner) {
+        if (!this.$refs[wrapper]) return
+
+        let imageCdWrapper = this.$refs[wrapper]
+        let image = this.$refs[inner]
+        let wTransform = getComputedStyle(imageCdWrapper)[transform]
+        let iTransform = getComputedStyle(image)[transform]
+        imageCdWrapper.style[transform] = wTransform === 'none' ? iTransform : iTransform.concat(' ', wTransform)
+      },
       ...mapMutations({
         setFullScreen: 'SET_FULL_SCREEN'
       }),
@@ -445,8 +478,9 @@
     },
     watch: {
       currentSong(newSong, oldSong) {
-        if (!newSong.id) return
         if (!newSong.id || !newSong.url || newSong.id === oldSong.id) return
+        this.songReady = false
+        this.canLyricPlay = false
         // 清除歌词计时器
         if (this.currentLyric) {
           this.currentLyric.stop()
@@ -456,17 +490,37 @@
           this.playingLyric = ''
           this.currentLineNum = 0
         }
-        this.$nextTick(() => {
-          this.$refs.audio.play()
-          this.getLyric()
-        })
+        this.$refs.audio.src = newSong.url
+        this.$refs.audio.play()
+        clearTimeout(this.timer)
+        this.timer = setTimeout(() => {
+          this.songReady = true
+        }, 5000)
+        this.getLyric()
         // 切到后台的时候 JS 是停止的，切换到后台才会重新执行，触发了 end 函数执行 currentSong 的变化，currentSong 改变会影响 audio 的 src 的变化，这个时候如果没有延时立即播放，会导致歌曲还没有准备好就立马调用 play 导致不能播放的问题。
       },
       playing(newFlag) {
+        if (!this.songReady) return
         const audio = this.$refs.audio
         this.$nextTick(() => {
           newFlag ? audio.play() : audio.pause()
         })
+        if (!newFlag) {
+          if (this.fullScreen) {
+            this.syncWrapperTransform('imageCdWrapper', 'image')
+          } else {
+            this.syncWrapperTransform('miniWrapper', 'miniImage')
+          }
+        }
+      },
+      // 迷你播放器暂停状态，进入全屏，按钮在进度条最左边
+      fullScreen(newVal) {
+        if (newVal) {
+          setTimeout(() => {
+            this.$refs.lyricList.refresh()
+            this.$refs.progressBar.setProgressOffset(this.percent)
+          }, 20)
+        }
       }
     },
     components: {
@@ -570,9 +624,6 @@
               }
               .play {
                 animation: rotate 20s linear infinite;
-              }
-              .pause {
-                animation-play-state: paused;
               }
             }
           }

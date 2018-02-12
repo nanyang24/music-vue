@@ -31,6 +31,7 @@ export class Song {
     })
   }
 }
+
 // 创建我们自定义内容的歌曲对象
 export function createSong(musicData) {
   return new Song({
@@ -52,4 +53,9 @@ function filterSinger(singer) {
     ret.push(s.name)
   })
   return ret.join('/')
+}
+
+// 判断是否为有效歌曲（新增了判断收费歌曲）
+export function isValidMusic(musicData) {
+  return musicData.songid && musicData.albummid && (!musicData.pay || musicData.pay.payalbumprice === 0)
 }

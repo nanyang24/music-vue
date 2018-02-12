@@ -68,15 +68,18 @@
       _getPercent() {
         const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
         return this.$refs.progress.clientWidth / barWidth
+      },
+      setProgressOffset(percent) {
+        if (percent >= 0 && !this.touch.initiated) {
+          const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
+          const offsetWidth = percent * barWidth
+          this._offset(offsetWidth)
+        }
       }
     },
     watch: {
       percent(newPercent) {
-        if (newPercent >= 0 && !this.touch.initiated) {
-          const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
-          const offsetWidth = newPercent * barWidth
-          this._offset(offsetWidth)
-        }
+        this.setProgressOffset(newPercent)
       }
     }
   }

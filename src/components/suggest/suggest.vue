@@ -77,7 +77,7 @@
       },
       _genResult(data) {
         let ret = []
-        if (data.zhida && data.zhida.singerid) {
+        if (data.zhida && data.zhida.singerid && this.page === 1) { // suggest only add singer once
           ret.push({...data.zhida, ...{type: TYPE_SINGER}})  // 将两个对象扩展到一个对象上
         }
         if (data.song) {
