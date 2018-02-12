@@ -44,6 +44,8 @@ module.exports = {
   },
 
   build: {
+    // 生产环境的端口
+    port: 9000,
     // Template for index.html
     index: path.resolve(__dirname, '../dist/index.html'),
 

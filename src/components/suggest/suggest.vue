@@ -26,7 +26,7 @@
 <script>
   import {searchQ} from 'api/search'
   import {ERR_OK} from 'api/config'
-  import {createSong} from 'common/js/song'
+  import {createSong, isValidMusic} from 'common/js/song'
   import Scroll from 'base/scroll/scroll'
   import Loading from 'base/loading/loading'
   import SingerFormat from 'common/js/SingerFormat'
@@ -88,7 +88,7 @@
       _normalizeSongs(list) {
         let ret = []
         list.forEach(musicData => {
-          if (musicData.songid && musicData.albumid) {
+          if (isValidMusic(musicData)) {
             ret.push(createSong(musicData))
           }
         })
