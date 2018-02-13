@@ -43,7 +43,7 @@
       flex: 1;
       padding: 8px;
       text-align: center;
-      font-size: $font-size-medium;
+      font-size: $font-size-medium-x;
       color: $color-text-d;
       &.active {
         background: $color-highlight-background;

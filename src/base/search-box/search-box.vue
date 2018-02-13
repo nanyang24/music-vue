@@ -50,7 +50,7 @@
     width: 100%;
     padding: 0 6px;
     height: 40px;
-    background: $color-highlight-background;
+    background: $color-input-custom;
     border-radius: 6px;
     .icon-search {
       font-size: 24px;
@@ -63,7 +63,7 @@
       font-size: $font-size-medium;
       color: $color-text;
       border: 0;
-      background: $color-highlight-background;
+      background: $color-input-custom;
       outline: 0;
       &::placeholder {
         color: $color-text-d;

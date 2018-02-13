@@ -118,14 +118,14 @@
     }
     .back {
       position: absolute;
-      top: 0;
+      top: 6px;
       left: 6px;
       z-index: 50;
       .icon-back {
         display: block;
         padding: 10px;
         font-size: $font-size-large-x;
-        color: $color-theme;
+        color: $color-theme-custom1;
       }
     }
     .switches-wrapper {
@@ -146,6 +146,7 @@
         vertical-align: middle;
         margin-right: 6px;
         font-size: $font-size-medium-x;
+        color: $color-theme-custom1;
       }
       .text {
         display: inline-block;

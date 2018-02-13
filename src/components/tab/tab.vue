@@ -31,13 +31,24 @@
       flex: 1;
       text-align: center;
       .tab-link {
+        position: relative;
         padding-bottom: 5px;
         color: $color-text-l;
+        font-size: $font-size-medium-x;
       }
       &.router-link-active {
         .tab-link {
           color: $color-theme;
-          border-bottom: 2px solid $color-theme;
+          &:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 4px;
+            border-radius: 5px;
+            background: linear-gradient(to right, #aa39d8 , #f92f6f);
+          }
         }
       }
     }

@@ -6,6 +6,7 @@
       <div class="progress" ref="progress"></div>
       <!-- 进度条 按钮 -->
       <div class="progress-btn-wrapper"
+           v-if="showBtn"
            ref="progressBtn"
            @touchstart.prevent="progressTouchStart"
            @touchmove.prevent="progressTouchMove"
@@ -27,6 +28,14 @@
       percent: {
         type: Number,
         default: 0
+      },
+      canClick: {
+        type: Boolean,
+        default: true
+      },
+      showBtn: {
+        type: Boolean,
+        default: true
       }
     },
     created() {
@@ -39,6 +48,7 @@
         this.touch.left = this.$refs.progress.clientWidth // 已播放的进度长度
       },
       progressTouchMove(e) {
+        if (!this.canClick) return
         if (!this.touch.initiated) return
         const deltaX = e.touches[0].pageX - this.touch.startX // 手指移动的偏移量，目前的位置 - 初始的位置
         // 偏移量(已播放的进度长度 + 手指移动的偏移量)，要大于0，但是总和不能大于整体宽度
@@ -51,6 +61,7 @@
         this._triggerPercent()  // 通知 改变了percent
       },
       progressClick(e) {
+        if (!this.canClick) return
         // 当我们点击 btn 的时候，offsetX 获取就不正确了
         // this._offset(e.offsetX - progressBtnWidth / 2)
         const rect = this.$refs.progressBar.getBoundingClientRect()
@@ -63,7 +74,9 @@
       },
       _offset(offsetWidth) {
         this.$refs.progress.style.width = `${offsetWidth}px`
-        this.$refs.progressBtn.style[transform] = `translate3d(${offsetWidth}px, 0,0)`
+        if (this.showBtn) {
+          this.$refs.progressBtn.style[transform] = `translate3d(${offsetWidth}px, 0,0)`
+        }
       },
       _getPercent() {
         const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
@@ -90,7 +103,6 @@
 
   .progress-bar {
     height: 30px;
-    margin: 0 5px;
     .bar-inner {
       position: relative;
       top: 13px;
@@ -99,7 +111,7 @@
       .progress {
         position: absolute;
         height: 100%;
-        background: $color-theme;
+        background: $color-bg-custom;
       }
       .progress-btn-wrapper {
         position: absolute;

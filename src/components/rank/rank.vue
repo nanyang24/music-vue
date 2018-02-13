@@ -109,6 +109,7 @@
           background: $color-highlight-background;
           color: $color-text-d;
           font-size: $font-size-small;
+          box-shadow: 2px 2px 0px #F5387D, 2px 2px 0px #B120FA;
           .song {
             @include no-wrap();
             line-height: 26px;

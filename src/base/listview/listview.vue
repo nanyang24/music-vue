@@ -183,8 +183,8 @@
         line-height: 30px;
         padding-left: 20px;
         font-size: $font-size-small;
-        color: $color-text-l;
         background: $color-highlight-background;
+        box-shadow: 2px 2px 0px #F5387D, 2px 2px 0px #B120FA;
       }
       .list-group-item {
         display: flex;
@@ -217,7 +217,7 @@
         color: hsla(0, 0%, 100%, .5);
         font-size: $font-size-small;
         &.current {
-          color: $color-theme;
+          color: $color-text;
         }
       }
     }
@@ -231,8 +231,8 @@
         line-height: 30px;
         padding-left: 20px;
         font-size: $font-size-small;
-        color: $color-text-l;
         background: $color-highlight-background;
+        box-shadow: 2px 2px 0px #F5387D, 2px 2px 0px #B120FA;
       }
     }
     .loading-container {

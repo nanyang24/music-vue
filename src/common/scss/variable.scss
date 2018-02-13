@@ -1,10 +1,10 @@
 // 颜色定义规范
 
-$color-background: #222;
+$color-background: #1f2635;
 $color-background-d: rgba(0, 0, 0, 0.3);
-$color-highlight-background: #333;
+$color-highlight-background: #1f2635;
 $color-dialog-background: #666;
-$color-theme: #ffcd32;
+$color-theme: #c2cbdd;
 $color-theme-d: rgba(255, 205, 49, 0.5);
 $color-sub-theme: #d93f30;
 $color-text: #fff;
@@ -12,7 +12,12 @@ $color-text-d: rgba(255, 255, 255, 0.3);
 $color-text-l: rgba(255, 255, 255, 0.5);
 $color-text-ll: rgba(255, 255, 255, 0.8);
 
-//字体定义规范
+$color-theme-custom1: #f33d7e;
+$color-theme-custom2: #b53fc6;
+$color-input-custom: #2c3548;
+$color-bg-custom: linear-gradient(to right, #aa39d8, #f92f6f);
+
+// 字体定义规范
 
 $font-size-small-s: 10px;
 $font-size-small: 12px;

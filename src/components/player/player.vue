@@ -61,7 +61,7 @@
             <span class="time time-r">{{formatTime(currentSong.duration)}}</span>
           </div>
           <div class="operators">
-            <div @click="changeMode" class="icon i-left">
+            <div @click="changeMode" class="icon i-left i-small">
               <i :class="iconMode"></i>
             </div>
             <div class="icon i-left" :class="disableCls">
@@ -73,7 +73,7 @@
             <div class="icon i-right" :class="disableCls">
               <i @click="next" class="icon-next"></i>
             </div>
-            <div class="icon i-right">
+            <div class="icon i-right i-small">
               <i @click="toggleFavorite(currentSong)" class="icon" :class="favoriteIcon"></i>
             </div>
           </div>
@@ -82,6 +82,9 @@
     </transition>
     <transition name="mini">
       <div @click="open" class="mini-player" v-show="!fullScreen">
+        <div class="mini-progress-bar">
+          <ProgressBar :percent="percent" :canClick="false" :showBtn="false"></ProgressBar>
+        </div>
         <div class="icon">
           <div class="imgWrapper" ref="miniWrapper">
             <img ref="miniImage" :class="cdCls" width="40" height="40" :src="currentSong.image">
@@ -175,7 +178,7 @@
     mounted() {
       // 适配 iPhoneX
       this.$refs.cdWrapper.style.top = isIphoneX() ? `25px` : 0
-      this.$refs.playingLyricWrapper.style.marginTop = isIphoneX() ? `120px` : `50px`
+      this.$refs.playingLyricWrapper.style.marginTop = isIphoneX() ? `100px` : `30px`
     },
     methods: {
       back() {
@@ -567,7 +570,7 @@
             display: block;
             padding: 9px;
             font-size: $font-size-large-x;
-            color: $color-theme;
+            color: $color-theme-custom1;
             transform: rotate(-90deg);
           }
         }
@@ -686,7 +689,7 @@
             &.active {
               width: 20px;
               border-radius: 5px;
-              background: $color-text-ll;
+              background: $color-bg-custom;
             }
           }
         }
@@ -704,9 +707,11 @@
             line-height: 30px;
             &.time-l {
               text-align: left;
+              margin-right: 5px;
             }
             &.time-r {
               text-align: right;
+              margin-left: 5px;
             }
           }
           .progress-bar-wrapper {
@@ -718,12 +723,17 @@
           align-items: center;
           .icon {
             flex: 1;
-            color: $color-theme;
+            color: $color-theme-custom1;
             &.disable {
-              color: $color-theme-d;
+              color: $color-theme-custom2;
             }
             i {
               font-size: 30px;
+            }
+          }
+          .i-small {
+            i {
+              font-size: 25px;
             }
           }
           .i-left {
@@ -733,7 +743,7 @@
             padding: 0 20px;
             text-align: center;
             i {
-              font-size: 40px;
+              font-size: 50px;
             }
           }
           .i-right {
@@ -775,6 +785,11 @@
       }
       &.mini-enter, &.mini-leave-to {
         opacity: 0;
+      }
+      .mini-progress-bar {
+        position: absolute;
+        width: 100%;
+        bottom: 47px;
       }
       .icon {
         flex: 0 0 40px;
@@ -820,7 +835,7 @@
         padding: 0 10px;
         .icon-play-mini, .icon-pause-mini, .icon-playlist {
           font-size: 30px;
-          color: $color-theme-d;
+          color: $color-theme-custom1;
         }
         .icon-mini {
           font-size: 32px;

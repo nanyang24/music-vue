@@ -16,13 +16,15 @@
           <ul>
             <li @click="selectItem(item)" v-for="(item, index) in discList" class="item">
               <div class="icon">
-                <img v-lazy="item.imgurl" width="60" height="60" alt="">
+                <img v-lazy="item.imgurl" width="80" height="80" alt="">
               </div>
               <div class="text">
                 <h2 class="name">{{item.creator.name}}</h2>
                 <p class="desc">{{item.dissname}}</p>
               </div>
             </li>
+            <!-- 占位元素，因为margin撑不开高度 -->
+            <li class="plaveholder"></li>
           </ul>
         </div>
       </div>
@@ -120,21 +122,32 @@
       }
       .recommend-list {
         .list-title {
-          height: 65px;
-          line-height: 65px;
+          height: 60px;
+          line-height: 60px;
           text-align: center;
-          font-size: $font-size-medium;
+          font-size: $font-size-medium-x;
           color: $color-theme;
         }
         .item {
           display: flex;
           box-sizing: border-box;
           align-items: center;
-          padding: 0 20px 20px 20px;
+          padding: 15px 20px 15px 20px;
+          margin: 20px 35px 20px 55px;
+          box-shadow: 2px 2px 0px #F5387D, 2px 2px 0px #B120FA;
+          border-radius: 12px;
+          &:first-child {
+            margin-top: 0;
+          }
           .icon {
             flex: 0 0 60px;
             width: 60px;
-            padding-right: 20px;
+            position: relative;
+            top: -4px;
+            left: -40px;
+            img {
+              border-radius: 16px;
+            }
           }
           .text {
             display: flex;
@@ -152,6 +165,9 @@
               color: $color-text-d;
             }
           }
+        }
+        .plaveholder{
+          padding: 6px 0
         }
       }
       .loading-container {

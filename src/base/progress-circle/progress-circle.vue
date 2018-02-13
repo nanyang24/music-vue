@@ -44,11 +44,11 @@
       transform-origin: center;
       &.progress-background {
         transform: scale(0.9);
-        stroke: $color-theme-d;
+        stroke: $color-theme-custom1;
       }
       &.progress-bar {
         transform: scale(0.9) rotate(-90deg);
-        stroke: $color-theme;
+        stroke: $color-theme-custom2;
       }
     }
   }

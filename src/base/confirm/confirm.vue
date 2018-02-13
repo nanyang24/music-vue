@@ -4,6 +4,9 @@
       <div class="confirm-wrapper">
         <div class="confirm-content">
           <p class="text">{{text}}</p>
+          <p v-if="textb" class="text">{{textb}}</p>
+          <p v-if="textc" class="text">{{textc}}</p>
+          <p v-if="textd" class="text">{{textd}}</p>
           <div class="operate">
             <div @click="cancel" class="operate-btn left">{{cancelmBtnText}}</div>
             <div @click="confirm" class="operate-btn">{{confirmBtnText}}</div>
@@ -18,6 +21,18 @@
   export default {
     props: {
       text: {
+        type: String,
+        default: ''
+      },
+      textb: {
+        type: String,
+        default: ''
+      },
+      textc: {
+        type: String,
+        default: ''
+      },
+      textd: {
         type: String,
         default: ''
       },
@@ -42,11 +57,11 @@
       hide() {
         this.showFlag = false
       },
-      cancel(){
+      cancel() {
         this.hide()
         this.$emit('cancel')
       },
-      confirm(){
+      confirm() {
         this.hide()
         this.$emit('confirm')
       }

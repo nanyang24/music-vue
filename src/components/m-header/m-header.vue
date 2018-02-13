@@ -1,15 +1,41 @@
 <template>
   <div class="m-header">
     <div class="icon"></div>
-    <h1 class="text">Music</h1>
+    <h1 @click="showConfirm" class="text">NY-Music</h1>
     <router-link to="/user" class="mine" tag="div">
       <i class="icon-mine"></i>
     </router-link>
+    <Confirm ref="confirm"
+             :text="text"
+             :textb="textb"
+             :textc="textc"
+             :textd="textd"
+             cancelmBtnText="关闭"
+             confirmBtnText="了解"></Confirm>
   </div>
 </template>
 
 <script>
-  export default {}
+  import Confirm from 'base/confirm/confirm'
+
+  export default {
+    data() {
+      return {
+        text: `前端&UI：南洋`,
+        textb: `nanyang1412@gmail.com`,
+        textc: `技术栈：Vue2.0全家桶`,
+        textd: `数据接口：QQ-music-API`
+      }
+    },
+    methods: {
+      showConfirm() {
+        this.$refs.confirm.show()
+      }
+    },
+    components: {
+      Confirm
+    }
+  }
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
@@ -29,10 +55,10 @@
       vertical-align: top;
       margin-top: 6px;
       margin-right: 9px;
-      width: 30px;
+      width: 32px;
       height: 32px;
       @include bg-img('logo');
-      background-size: 30px 32px;
+      background-size: 32px 32px;
     }
     .text {
       display: inline-block;

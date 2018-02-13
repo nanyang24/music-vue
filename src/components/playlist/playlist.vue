@@ -18,7 +18,7 @@
               <i class="current" :class="getCurrentIcon(item)"></i>
               <span class="text">{{item.name}}</span>
               <span @click.stop="toggleFavorite(item)" class="like">
-                <i :class="favoriteIcon"></i>
+                <i :class="getFavoriteIcon(item)"></i>
               </span>
               <span @click.stop="deleteOne(item)" class="delete">
                 <i class="icon-delete"></i>
@@ -171,7 +171,7 @@
           .icon {
             margin-right: 10px;
             font-size: 30px;
-            color: $color-theme-d;
+            color: $color-theme-custom1;
           }
           .text {
             flex: 1;
@@ -206,7 +206,7 @@
             flex: 0 0 20px;
             width: 20px;
             font-size: $font-size-small;
-            color: $color-theme-d;
+            color: $color-theme-custom1;
           }
           .text {
             flex: 1;
@@ -243,6 +243,7 @@
           .icon-add {
             margin-right: 5px;
             font-size: $font-size-small-s;
+            color: $color-theme-custom1;
           }
           .text {
             font-size: $font-size-small;
