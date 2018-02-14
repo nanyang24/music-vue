@@ -19,7 +19,7 @@
 
 ## 在线演示
 
-<div align=center><a href="https://ele.n-y.io" target=_blank>在线预览戳我</a></div>
+<div align=center><a href="https://music-vue.n-y.io" target=_blank>在线预览戳我</a></div>
 <div align=center>为了更好的体验，请用开发者工具模拟移动端体验</div>
 <br>
 <div align=center>
@@ -67,7 +67,7 @@
 主要页面：播放器内核页、推荐页、歌单详情页、歌手页、歌手详情页、排行页、搜索页、添加歌曲页、个人中心页等。
 核心页面：播放器内核页
 
-**项目结构**
+## 项目结构
 <img src="https://raw.githubusercontent.com/nanyang24/music-vue/master/img/dir.png" width="50%">
 
 
