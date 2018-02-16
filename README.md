@@ -1,7 +1,7 @@
 # Vue Music webApp
 
 
-<p align="center"><a href="http://sioxas.github.io/" target="_blank"><img width="300"src="https://raw.githubusercontent.com/nanyang24/music-vue/master/img/Apple_Music_Blur.png"></a></p>
+<p align="center"><a href="https://music-vue.n-y.io" target="_blank"><img width="300"src="https://raw.githubusercontent.com/nanyang24/music-vue/master/img/Apple_Music_Blur.png"></a></p>
 <p align="center">Vue 音乐App、数据抓取自QQ音乐</p>
 <p align="center">
   <a href="https://github.com/nanyang24"><img src="https://img.shields.io/badge/build-passing-brightgreen.svg" alt="Vue"></a>
@@ -15,7 +15,7 @@
 </p>
 
 
-
+#### [音乐项目 music app 知识点总结](https://github.com/nanyang24/music-vue/blob/master/conclusion.md)
 
 ## 在线演示
 
