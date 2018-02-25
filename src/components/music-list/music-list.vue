@@ -14,7 +14,7 @@
       <div class="filter" ref="filter"></div>
     </div>
     <div class="bg-layer" ref="layer"></div>
-    <Scroll @scroll="scroll" ref="list" class="list" :probeType="probeType" :listenScroll="listenScroll">
+    <Scroll @scroll="scroll" ref="list" class="list" :click="click" :probeType="probeType" :listenScroll="listenScroll">
       <div class="song-list-wrapper">
         <SongList @select="selectItem" :songs="songs" :rank="rank"></SongList>
       </div>
@@ -61,6 +61,7 @@
     },
     data() {
       return {
+        click: true,
         scrollY: 0
       }
     },

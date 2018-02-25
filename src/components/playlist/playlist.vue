@@ -9,7 +9,7 @@
             <span @click="showConfirm" class="clear"><i class="icon-clear"></i></span>
           </h1>
         </div>
-        <Scroll ref="listContent" class="list-content">
+        <Scroll ref="listContent" class="list-content" :click="click">
           <transition-group name="list" tag="ul">
             <li :key="item.id"
                 @click="selectItem(item, index)"
@@ -57,6 +57,7 @@
     ],
     data() {
       return {
+        click: true,
         showFlag: false
       }
     },

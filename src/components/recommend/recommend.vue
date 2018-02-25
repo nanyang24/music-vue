@@ -1,6 +1,6 @@
 <template>
   <div class="recommend" ref="recommend">
-    <Scroll ref="scroll" class="recommend-content" :data="discList">
+    <Scroll ref="scroll" class="recommend-content" :data="discList" :click="click">
       <div>
         <div v-if="recommends.length" class="slider-wrapper" ref="sliderWrapper"> <!-- v-if 确保获取到数据再渲染Slider -->
           <Slider>
@@ -52,7 +52,8 @@
     data() {
       return {
         recommends: [],
-        discList: []
+        discList: [],
+        click: true
       }
     },
     created() {

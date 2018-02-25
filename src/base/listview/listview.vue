@@ -1,6 +1,7 @@
 <template>
   <Scroll class="listview"
           ref="listview"
+          :click="click"
           :listenScroll="listenScroll"
           :probeType="probeType"
           @scroll="scroll">
@@ -57,6 +58,7 @@
     },
     data() {
       return {
+        click: true,
         currentIndex: 0,
         scrollY: -1,  // 初始值只要不是一个大于 0 的值其实都可以
         diff: -1

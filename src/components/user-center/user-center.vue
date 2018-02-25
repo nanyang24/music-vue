@@ -12,12 +12,12 @@
         <span class="text">随机播放全部</span>
       </div>
       <div class="list-wrapper" ref="listWrapper">
-        <Scroll v-if="currentIndex === 0" ref="favoriteList" class="list-scroll">
+        <Scroll v-if="currentIndex === 0" ref="favoriteList" class="list-scroll" :click="click">
           <div class="list-inner">
             <SongList @select="selectSong" :songs="favoriteList"></SongList>
           </div>
         </Scroll>
-        <Scroll v-if="currentIndex === 1" ref="playList" class="list-scroll">
+        <Scroll v-if="currentIndex === 1" ref="playList" class="list-scroll" :click="click">
           <div class="list-inner">
             <SongList @select="selectSong" :songs="playHistory"></SongList>
           </div>
@@ -44,6 +44,7 @@
     ],
     data() {
       return {
+        click: true,
         currentIndex: 0,
         switches: [
           {name: '我喜欢的'},

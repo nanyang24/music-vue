@@ -4,7 +4,7 @@
       <SearchBox @query="onQueryChange" ref="searchBox"></SearchBox>
     </div>
     <div ref="shortcutWrapper" class="shortcut-wrapper" v-show="!query">
-      <Scroll class="shortcut" :data="shortcut" ref="shortCut">
+      <Scroll class="shortcut" :data="shortcut" ref="shortCut" :click="click">
         <div>
           <div class="hot-key">
             <h1 class="title">热门搜索</h1>
@@ -54,6 +54,7 @@
     ],
     data() {
       return {
+        click: true,
         hotkey: [],
       }
     },

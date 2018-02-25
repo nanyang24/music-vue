@@ -1,6 +1,6 @@
 <template>
   <div class="rank" ref="rank">
-    <Scroll class="toplist" ref="toplist">
+    <Scroll class="toplist" ref="toplist" :click="click">
       <ul>
         <li @click="selectItem(item)" class="item" v-for="(item, index) in topList">
           <div class="icon">
@@ -36,6 +36,7 @@
     ],
     data() {
       return {
+        click: true,
         topList: []
       }
     },
