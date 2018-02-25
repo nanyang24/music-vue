@@ -4,6 +4,7 @@
           ref="suggest"
           class="suggest"
           :data="result"
+          :click="click"
           :pullup="pullup"
           :beforeScroll="beforeScroll">
     <ul class="suggest-list">
@@ -49,6 +50,7 @@
     },
     data() {
       return {
+        click: true,
         page: 1,
         result: [],
         pullup: true,
